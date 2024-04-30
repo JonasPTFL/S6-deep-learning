@@ -12,7 +12,7 @@ lobster_bisque
 scallops
 eggs_benedict
 macarons
-pancakes
+spring_rolls
 lasagna
 apple_pie
 tuna_tartare
@@ -27,4 +27,4 @@ nachos
 beignets
 spaghetti_carbonara
 panna_cotta
-spring_rolls
+pancakes
