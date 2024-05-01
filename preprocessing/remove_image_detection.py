@@ -87,3 +87,5 @@ if removed_images_count > 0:
         # show removed images
         for removed_image in removed_images:
             print(removed_image)
+else:
+    print("No removed images detected.")
