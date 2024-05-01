@@ -1,4 +1,6 @@
 import os
+import shutil
+
 import numpy as np
 import constants
 
@@ -71,11 +73,13 @@ if removed_images_count > 0:
     # prompt user to remove the images
     confirmation_keyword = 'yes'
     display_keyword = 'show'
+    restore_keyword = 'restore'
     confirmation_input = input(
         f"Detected {removed_images_count} removed image(s). "
         f"Append them to file '{constants.REMOVED_IMAGES_STORAGE_PATH}' now? Type:\n"
         f"   '{confirmation_keyword}': append to file\n"
         f"   '{display_keyword}': show removed files\n"
+        f"   '{restore_keyword}': restore removed files\n"
     )
 
     if confirmation_input == confirmation_keyword:
@@ -87,5 +91,16 @@ if removed_images_count > 0:
         # show removed images
         for removed_image in removed_images:
             print(removed_image)
+    elif confirmation_input == restore_keyword:
+        # restore removed images
+        dataset_backup_path = input(
+            "Enter the path to the backup of the dataset: (given path should contain folder: 'dataset/food-101/...')\n"
+        )
+        if dataset_backup_path:
+            for removed_image in removed_images:
+                # remove relative path prefix ("../") from removed_image when accessing the backup images
+                backup_image_path = os.path.join(dataset_backup_path, removed_image[3:])
+                # copy removed images from backup to original dataset
+                shutil.copyfile(backup_image_path, removed_image)
 else:
     print("No removed images detected.")
