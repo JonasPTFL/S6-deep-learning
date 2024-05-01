@@ -1,7 +1,7 @@
-import constants
+from src.util import constants
 import os
 import numpy as np
-from data_utility import get_image_path
+from src.util.data_utility import get_image_path
 
 removed_images = set(np.loadtxt(constants.REMOVED_IMAGES_STORAGE_PATH, dtype=str))
 

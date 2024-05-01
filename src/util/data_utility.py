@@ -1,6 +1,6 @@
 import os
 
-from preprocessing import constants
+from src.util import constants
 
 
 def get_image_path(class_name, image_id):

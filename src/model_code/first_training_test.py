@@ -1,6 +1,6 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
-import preprocessing.constants as constants
+import src.util.constants as constants
 
 batch_size = 32
 img_height = 80

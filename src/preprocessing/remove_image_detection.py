@@ -2,8 +2,8 @@ import os
 import shutil
 
 import numpy as np
-import constants
-from preprocessing.data_utility import get_image_path_from_meta_data, get_image_path
+from src.util import constants
+from src.util.data_utility import get_image_path_from_meta_data, get_image_path
 
 
 def get_all_chosen_image_paths():

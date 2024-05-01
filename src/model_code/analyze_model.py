@@ -1,5 +1,5 @@
 import tensorflow as tf
-import preprocessing.constants as constants
+import src.util.constants as constants
 
 # Load the saved model
 loaded_model = tf.keras.models.load_model(constants.MODEL_PATH)

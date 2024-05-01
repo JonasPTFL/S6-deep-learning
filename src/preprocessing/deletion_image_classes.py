@@ -1,4 +1,4 @@
-import constants
+from src.util import constants
 import os
 import shutil
 
