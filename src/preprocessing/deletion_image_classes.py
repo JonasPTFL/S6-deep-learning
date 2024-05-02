@@ -13,7 +13,7 @@ def delete_classes():
     # filter the directories to remove
     for chosen_class in chosen_classes:
         for directory_path in all_dir_paths:
-            if chosen_class in directory_path.split(os.path.sep):
+            if chosen_class in directory_path.split("/"):
                 all_dir_paths.remove(directory_path)
 
     # remove first element, because it is the root folder of the images
