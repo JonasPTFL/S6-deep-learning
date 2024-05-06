@@ -13,7 +13,7 @@ def get_image_path(class_name, image_id):
     """
     # join path to dataset images with the class and id
     # ensure that the path uses forward slashes as join produces backslashes on windows
-    return os.path.join(constants.all_images_classpath, class_name, f"{image_id}.jpg").replace("\\", "/")
+    return os.path.join(constants.ALL_IMAGES_PATH, class_name, f"{image_id}.jpg").replace("\\", "/")
 
 
 def get_image_path_from_meta_data(metadata):

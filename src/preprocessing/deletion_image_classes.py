@@ -2,18 +2,18 @@ from src.util import constants
 import os
 import shutil
 
-chosen_classes = open(constants.chosen_classes_path).read().splitlines()
+chosen_classes = open(constants.CHOSEN_CLASSES_PATH).read().splitlines()
 
 
 def delete_classes():
     all_dir_paths = []
-    for directory_path, directory_name, filenames in os.walk(constants.all_images_classpath):
+    for directory_path, directory_name, filenames in os.walk(constants.ALL_IMAGES_PATH):
         all_dir_paths.append(directory_path)
 
     # filter the directories to remove
     for chosen_class in chosen_classes:
         for directory_path in all_dir_paths:
-            if chosen_class in directory_path.split("/"):
+            if chosen_class in directory_path.split(os.path.sep):
                 all_dir_paths.remove(directory_path)
 
     # remove first element, because it is the root folder of the images
