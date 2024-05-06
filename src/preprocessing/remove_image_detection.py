@@ -30,12 +30,12 @@ def get_all_chosen_image_paths():
     return [get_image_path_from_meta_data(image_metadata) for image_metadata in filtered_images_metadata]
 
 
-chosen_classes = np.loadtxt(constants.chosen_classes_path, dtype=str)
+chosen_classes = np.loadtxt(constants.CHOSEN_CLASSES_PATH, dtype=str)
 
 edited_image_paths = []
-for root, dirs, files in os.walk(constants.all_images_classpath):
+for root, dirs, files in os.walk(constants.ALL_IMAGES_PATH):
     current_class_dir_name = os.path.basename(root)
-    if root != constants.all_images_classpath and current_class_dir_name in chosen_classes:
+    if root != constants.ALL_IMAGES_PATH and current_class_dir_name in chosen_classes:
         for file in files:
             # get image path and append it to the edited_image_paths list
             # split the file name to remove the file extension

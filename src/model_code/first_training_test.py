@@ -7,7 +7,7 @@ img_height = 80
 img_width = 80
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
-    constants.all_images_classpath,
+    constants.ALL_IMAGES_PATH,
     validation_split=0.2,
     subset="training",
     seed=123,
@@ -15,7 +15,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
     batch_size=batch_size
 )
 val_ds = tf.keras.utils.image_dataset_from_directory(
-    constants.all_images_classpath,
+    constants.ALL_IMAGES_PATH,
     validation_split=0.2,
     subset="validation",
     seed=123,
@@ -35,7 +35,7 @@ for images, labels in train_ds.take(1):
 
 plt.show()
 
-num_classes = constants.amount_classes
+num_classes = constants.NUM_CLASSES
 model = tf.keras.Sequential([
     tf.keras.layers.Rescaling(1. / 255),
     tf.keras.layers.Conv2D(32, 3, activation='relu'),
