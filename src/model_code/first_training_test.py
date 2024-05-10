@@ -1,6 +1,8 @@
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import src.util.constants as constants
+from src.evaluation.metrics.confusion_matrix import ConfusionMatrix
+from src.evaluation.metrics.false_classificated_images import FalseClassifiedImages
 
 batch_size = 32
 img_height = 80
@@ -75,3 +77,9 @@ model.fit(
 # save model
 model.save(constants.MODEL_PATH)
 model.summary()
+
+metric_1 = ConfusionMatrix()
+metric_1.calculate_metric(model, train_ds, "stoic_buffalo")
+
+metric_2 = FalseClassifiedImages()
+metric_2.calculate_metric(model, train_ds, "stoic_buffalo")
