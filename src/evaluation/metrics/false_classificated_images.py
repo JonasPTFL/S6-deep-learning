@@ -21,8 +21,7 @@ def filter_and_plot(dataset, pred_labels):
 def plot_false_images(false_images):
     """
     Plots false images using matplotlib
-    :param false_images: list of triples with false classified
-    images, its true label and its predicted label
+    :param false_images: list of triples with false classified images, its true label and its predicted label
     """
     for count in range(10):
         # Ensure we only plot up to 18 random images
@@ -67,7 +66,7 @@ class FalseClassifiedImages(AbstractMetric, ABC):
     """
     The false classified images metric.
     """
-    def calculate_metric(self, model: tf.keras.Model, pass_test_data: tf.data.Dataset, model_id: str = "-1"):
-        y_pred_labels = model.predict(pass_test_data).argmax(axis=1)
-        filter_and_plot(pass_test_data, y_pred_labels)
+    def calculate_metric(self, model: tf.keras.Model, test_dataset: tf.data.Dataset, model_id: str = "-1"):
+        y_pred_labels = model.predict(test_dataset).argmax(axis=1)
+        filter_and_plot(test_dataset, y_pred_labels)
         return

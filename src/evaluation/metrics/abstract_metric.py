@@ -9,12 +9,12 @@ class AbstractMetric(ABC):
     """
 
     @abstractmethod
-    def calculate_metric(self, model: tf.keras.Model, test_data: tf.data.Dataset, model_id: str = "-1"):
+    def calculate_metric(self, model: tf.keras.Model, test_dataset: tf.data.Dataset, model_id: str = "-1"):
         """
         Abstract method to calculate metric of a deep learning model
         using image classification
         :param model_id: The id of the deep learning model if needed, else default value
         :param model: The model the metric needs to be evaluated on
-        :param test_data: The test data the metric needs to be evaluated on
+        :param test_dataset: The test data the metric needs to be evaluated on
         """
         pass
