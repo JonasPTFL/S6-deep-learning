@@ -1,12 +1,11 @@
-import itertools
 from abc import ABC
 
-from src.evaluation.metrics.abstract_metric import AbstractMetric
-import tensorflow as tf
-import numpy as np
-from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
+import tensorflow as tf
+from sklearn.metrics import confusion_matrix
+
+from src.evaluation.metrics.abstract_metric import AbstractMetric
 
 
 def plot_confusion_matrix(y_true, y_pred, classes, model_id, figsize=(15, 15)):
@@ -26,6 +25,6 @@ class ConfusionMatrix(AbstractMetric, ABC):
     def calculate_metric(self, model: tf.keras.Model = None, pass_test_data: tf.data.Dataset = None,
                          model_id: str = "-1"):
         class_names = pass_test_data.class_names
-        y_true = np.concatenate([y for x, y in pass_test_data], axis=0)
+        y_true = [label for images, labels in pass_test_data for image, label in zip(images, labels)]
         y_pred = model.predict(pass_test_data).argmax(axis=1)
         plot_confusion_matrix(y_true, y_pred, class_names, model_id)
