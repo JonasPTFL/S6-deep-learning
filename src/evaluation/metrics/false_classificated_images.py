@@ -7,20 +7,22 @@ from matplotlib import pyplot as plt
 from src.evaluation.metrics.abstract_metric import AbstractMetric
 
 
-def filter_and_plot(dataset, pred_labels):
+def filter_and_plot(dataset, pred_labels, model_id):
     """
     Filters out correct classified images and plots
     a random set of false classified images
+    :param model_id:
     :param dataset: The dataset to evaluate
     :param pred_labels: The predicted labels
     """
     false_images = filter_out_correct_classified_images(dataset, pred_labels)
-    plot_false_images(false_images)
+    plot_false_images(false_images, model_id)
 
 
-def plot_false_images(false_images):
+def plot_false_images(false_images, model_id):
     """
     Plots false images using matplotlib
+    :param model_id:
     :param false_images: list of triples with false classified images, its true label and its predicted label
     """
     for count in range(10):
@@ -32,13 +34,12 @@ def plot_false_images(false_images):
         num_cols = 6  # Number of columns in the grid
         num_rows = -(-num_images // num_cols)  # Equivalent to math.ceil(num_images / num_cols)
         fig, axes = plt.subplots(num_rows, num_cols, figsize=(30, 10))  # Adjust size as needed
-
         for i, (image, pred_class, true_class) in enumerate(false_images):
             ax = axes[i // num_cols, i % num_cols] if num_rows > 1 else axes[i % num_cols]
             ax.imshow(image)
             ax.set_title(f"Predicted: {pred_class}, True: {true_class}")
             ax.axis('off')
-
+        plt.suptitle(f"False Classified Images (Model ID: {model_id}), (Iteration: {count})", fontsize=30, fontweight='bold')
         plt.tight_layout()
         plt.show()
 
@@ -68,5 +69,5 @@ class FalseClassifiedImages(AbstractMetric, ABC):
     """
     def calculate_metric(self, model: tf.keras.Model, test_dataset: tf.data.Dataset, model_id: str = "-1"):
         y_pred_labels = model.predict(test_dataset).argmax(axis=1)
-        filter_and_plot(test_dataset, y_pred_labels)
+        filter_and_plot(test_dataset, y_pred_labels, model_id)
         return
