@@ -4,8 +4,8 @@ from src.util import constants
 
 # default values for DataLoader class
 default_batch_size = 32
-default_img_height = 256
-default_img_width = 256
+default_img_height = 224
+default_img_width = 224
 default_seed = 123
 default_validation_split = 0.2
 
@@ -33,24 +33,25 @@ class DataLoader:
         Loads training dataset from data directory with parameters set in constructor
         :return: training dataset
         """
-        return tf.keras.utils.image_dataset_from_directory(
-            constants.ALL_IMAGES_PATH,
-            validation_split=self.validation_split,
-            subset="training",
-            seed=self.seed,
-            image_size=(self.img_height, self.img_width),
-            batch_size=self.batch_size
-        )
+        return self.load_data("training")
 
     def load_validation_data(self) -> tf.data.Dataset:
         """
         Loads validation dataset from data directory with parameters set in constructor
         :return: validation dataset
         """
+        return self.load_data("validation")
+
+    def load_data(self, subset: str) -> tf.data.Dataset:
+        """
+        Loads dataset from data directory with parameters set in constructor
+        :param subset: the subset of the dataset to load
+        :return: the dataset
+        """
         return tf.keras.utils.image_dataset_from_directory(
             constants.ALL_IMAGES_PATH,
             validation_split=self.validation_split,
-            subset="validation",
+            subset=subset,
             seed=self.seed,
             image_size=(self.img_height, self.img_width),
             batch_size=self.batch_size

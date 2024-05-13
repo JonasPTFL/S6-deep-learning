@@ -30,5 +30,8 @@ CHOSEN_CLASSES_PATH = path_from_base('chosen_classes.txt')
 REMOVED_IMAGES_STORAGE_PATH = path_from_base('removed_images.txt')
 
 # model
-MODEL_PATH = path_from_base('models/saved_model/model_v1.keras')
-CHECKPOINT_MODEL_PATH = path_from_base('models/checkpoints/model_v1.weights.h5')
+MODEL_DIRECTORY = path_from_base('models/saved_model/')
+CHECKPOINT_MODEL_DIRECTORY = path_from_base('models/checkpoints/')
+
+# log directory for tensorboard
+LOG_DIR = path_from_base('logs/fit/')

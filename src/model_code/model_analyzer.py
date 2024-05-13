@@ -1,9 +1,36 @@
 import tensorflow as tf
+import src.model_code.model_architecture as ma
+from src.evaluation.evaluator import Evaluator
+from src.evaluation.metrics.confusion_matrix import ConfusionMatrix
+from src.evaluation.metrics.false_classificated_images import FalseClassifiedImages
+from src.evaluation.metrics.history import History
+from src.evaluation.metrics.standard_evaluate import StandardEvaluate
 
 
-def model_evaluate(model: tf.keras.Model) -> None:
+def model_evaluate(
+        model_architecture: ma.ModelArchitecture,
+        history: tf.keras.callbacks.History,
+        val_ds: tf.data.Dataset,
+) -> None:
     """
     Displays the model architecture
-    :param model: the model to display
+    :param model_architecture: the model to display
+    :param history: the history of the model returned by the training
+    :param val_ds: the validation dataset
     """
+    model = model_architecture.get_model()
     model.summary()
+
+    evaluator = Evaluator(
+        model,
+        val_ds,
+        history,
+        [
+            ConfusionMatrix(),
+            FalseClassifiedImages(),
+            History(),
+            StandardEvaluate(),
+        ]
+    )
+
+    evaluator.evaluate()
