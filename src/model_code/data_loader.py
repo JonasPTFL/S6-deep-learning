@@ -1,19 +1,13 @@
 import tensorflow as tf
 
-from src.util import constants
-
-# default values for DataLoader class
-default_batch_size = 32
-default_img_height = 224
-default_img_width = 224
-default_seed = 123
-default_validation_split = 0.2
+import src.util.constants as constants
+import src.util.default_values as default_values
 
 
 # DataLoader class, provides methods to load training and validation dataset
 class DataLoader:
-    def __init__(self, batch_size=default_batch_size, img_height=default_img_height, img_width=default_img_width,
-                 seed=default_seed, validation_split=default_validation_split):
+    def __init__(self, batch_size=default_values.batch_size, img_height=default_values.img_height, img_width=default_values.img_width,
+                 seed=default_values.seed, validation_split=default_values.validation_split):
         """
         Constructor for DataLoader class. Sets parameters for loading dataset and uses default values if not provided.
         :param batch_size: the size of the batch

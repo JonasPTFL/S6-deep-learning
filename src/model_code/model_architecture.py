@@ -1,32 +1,14 @@
 import tensorflow as tf
 
-from src.util import constants
-
-default_model_architecture = tf.keras.Sequential([
-    tf.keras.layers.Rescaling(1. / 255),
-    tf.keras.layers.Conv2D(32, 3, activation='relu'),
-    tf.keras.layers.MaxPooling2D(),
-    tf.keras.layers.Conv2D(32, 3, activation='relu'),
-    tf.keras.layers.MaxPooling2D(),
-    tf.keras.layers.Conv2D(32, 3, activation='relu'),
-    tf.keras.layers.MaxPooling2D(),
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(64, activation='relu'),
-    tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
-])
-default_compile_metrics = ['accuracy']
-default_loss = tf.losses.SparseCategoricalCrossentropy(from_logits=True)
-default_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)
+import src.util.default_values as default_values
 
 
 class ModelArchitecture:
     def __init__(
             self,
             architecture: tf.keras.Sequential = None,
-            optimizer=default_optimizer,
-            loss=default_loss,
+            optimizer=default_values.optimizer,
+            loss=default_values.loss,
             metrics=None
     ):
         """
@@ -37,12 +19,12 @@ class ModelArchitecture:
         :param metrics: the metrics to evaluate the model, uses default metrics if none are provided
         """
         if architecture is None:
-            self.architecture = default_model_architecture
+            self.architecture = default_values.model_architecture
         else:
             self.architecture = architecture
 
         if metrics is None:
-            metrics = default_compile_metrics
+            metrics = default_values.compile_metrics
 
         # compile the model
         self.architecture.compile(

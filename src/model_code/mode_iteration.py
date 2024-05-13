@@ -5,6 +5,7 @@ import src.model_code.model_analyzer as model_analyzer
 import src.model_code.model_architecture as ma
 import src.model_code.model_persistence as mp
 import src.model_code.model_training as mt
+import src.util.default_values as default_values
 
 
 class ModelIteration:
@@ -15,7 +16,7 @@ class ModelIteration:
             train_ds=None,
             val_ds=None,
             epochs: int = None,
-            iteration_name: str = 'unnamed_iteration'
+            iteration_name: str = default_values.model_iteration_name
     ):
         """
         Constructs model iteration with given model, training and validation dataset
@@ -47,7 +48,7 @@ class ModelIteration:
         self._evaluate()
 
         print(f'##########')
-        print(f'########## Model iteration "{self.iteration_name}" finished ##########')
+        print(f'########## Model iteration "{self.iteration_name}" finished')
         print(f'##########')
 
     def _get_save_filename(self) -> str:

@@ -2,11 +2,14 @@ import tensorflow as tf
 import src.model_code.model_persistence as model_persistence
 import src.util.constants as constants
 import src.model_code.model_architecture as model_architecture
+import src.util.default_values as default_values
 
-default_epochs = 10
 
-
-def model_train(model: model_architecture.ModelArchitecture, train_ds, val_ds, epochs: int = None) -> tf.keras.callbacks.History:
+def model_train(
+        model: model_architecture.ModelArchitecture,
+        train_ds: tf.data.Dataset,
+        val_ds: tf.data.Dataset,
+        epochs: int = None) -> tf.keras.callbacks.History:
     """
     Trains the model with the given datasets
     :param model: the model to train
@@ -16,7 +19,7 @@ def model_train(model: model_architecture.ModelArchitecture, train_ds, val_ds, e
     :return the model history
     """
     if epochs is None:
-        epochs = default_epochs
+        epochs = default_values.epochs
 
     # start tensorboard with the following command:
     # tensorboard --logdir logs/fit
