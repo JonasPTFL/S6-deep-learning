@@ -19,16 +19,17 @@ def model_checkpoint_callback() -> tf.keras.callbacks.ModelCheckpoint:
     )
 
 
-def model_train(model, train_ds, val_ds) -> None:
+def model_train(model, train_ds, val_ds):
     """
     Trains the model with the given datasets
     :param model: the model to train
     :param train_ds: the training dataset
     :param val_ds: the validation dataset
+    :return the model
     """
-    model.fit(
+    return model.fit(
         train_ds,
         validation_data=val_ds,
-        epochs=3,
+        epochs=10,
         callbacks=[model_checkpoint_callback()]
     )

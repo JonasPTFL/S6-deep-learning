@@ -39,7 +39,8 @@ def plot_false_images(false_images, model_id):
             ax.imshow(image)
             ax.set_title(f"Predicted: {pred_class}, True: {true_class}")
             ax.axis('off')
-        plt.suptitle(f"False Classified Images (Model ID: {model_id}), (Iteration: {count})", fontsize=30, fontweight='bold')
+        plt.suptitle(f"False Classified Images (Model ID: {model_id}), (Iteration: {count})", fontsize=30,
+                     fontweight='bold')
         plt.tight_layout()
         plt.show()
 
@@ -65,9 +66,11 @@ def filter_out_correct_classified_images(dataset, pred_labels):
 
 class FalseClassifiedImages(AbstractMetric, ABC):
     """
-    The false classified images metric.
+    This class implements a metric to show all the false classified images given a dataset.
     """
-    def calculate_metric(self, model: tf.keras.Model, test_dataset: tf.data.Dataset, model_id: str = "-1"):
+    def calculate_metric(self, model: tf.keras.Model = None,
+                         test_dataset: tf.data.Dataset = None,
+                         model_id: str = "-1", model_history=None):
         y_pred_labels = model.predict(test_dataset).argmax(axis=1)
         filter_and_plot(test_dataset, y_pred_labels, model_id)
         return
