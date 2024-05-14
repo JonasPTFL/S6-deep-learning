@@ -5,7 +5,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 
 
-def plot_loss_values(model_history):
+def plot_loss_values(model_history, model_id, timestamp):
     """
     Plot loss values of model history.
     :param model_history: the model history.
@@ -17,10 +17,11 @@ def plot_loss_values(model_history):
     plt.ylabel('Loss')
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='upper left')
+    plt.savefig(f"../reports/{model_id}/{timestamp}/train_val_loss.png")
     plt.show()
 
 
-def plot_accuracy_values(model_history):
+def plot_accuracy_values(model_history, model_id, timestamp):
     """
     Plot accuracy values of model history.
     :param model_history: the model history.
@@ -32,12 +33,14 @@ def plot_accuracy_values(model_history):
     plt.ylabel('Accuracy')
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Validation'], loc='upper left')
+    plt.savefig(f"../reports/{model_id}/{timestamp}/train_val_accuracy.png")
     plt.show()
 
 
 class History(AbstractMetric, ABC):
     def calculate_metric(self, model: tf.keras.Model = None,
                          test_dataset: tf.data.Dataset = None,
-                         model_id: str = "-1", model_history=None):
-        plot_accuracy_values(model_history)
-        plot_loss_values(model_history)
+                         model_id: str = "-1", model_history=None,
+                         model_timestamp=None):
+        plot_accuracy_values(model_history, model_id, model_timestamp)
+        plot_loss_values(model_history, model_id, model_timestamp)

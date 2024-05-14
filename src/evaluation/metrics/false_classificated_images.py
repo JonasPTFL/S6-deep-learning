@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 from src.evaluation.metrics.abstract_metric import AbstractMetric
 
 
-def filter_and_plot(dataset, pred_labels, model_id):
+def filter_and_plot(dataset, pred_labels, model_id, timestamp):
     """
     Filters out correct classified images and plots
     a random set of false classified images
@@ -16,10 +16,10 @@ def filter_and_plot(dataset, pred_labels, model_id):
     :param pred_labels: The predicted labels
     """
     false_images = filter_out_correct_classified_images(dataset, pred_labels)
-    plot_false_images(false_images, model_id)
+    plot_false_images(false_images, model_id, timestamp)
 
 
-def plot_false_images(false_images, model_id):
+def plot_false_images(false_images, model_id, timestamp):
     """
     Plots false images using matplotlib
     :param model_id:
@@ -42,6 +42,7 @@ def plot_false_images(false_images, model_id):
         plt.suptitle(f"False Classified Images (Model ID: {model_id}), (Iteration: {count})", fontsize=30,
                      fontweight='bold')
         plt.tight_layout()
+        plt.savefig(f"../reports/{model_id}/{timestamp}/false_classified_images_{count}.png")
         plt.show()
 
 
@@ -68,9 +69,11 @@ class FalseClassifiedImages(AbstractMetric, ABC):
     """
     This class implements a metric to show all the false classified images given a dataset.
     """
+
     def calculate_metric(self, model: tf.keras.Model = None,
                          test_dataset: tf.data.Dataset = None,
-                         model_id: str = "-1", model_history=None):
+                         model_id: str = "-1", model_history=None,
+                         model_timestamp=None):
         y_pred_labels = model.predict(test_dataset).argmax(axis=1)
-        filter_and_plot(test_dataset, y_pred_labels, model_id)
+        filter_and_plot(test_dataset, y_pred_labels, model_id, model_timestamp)
         return

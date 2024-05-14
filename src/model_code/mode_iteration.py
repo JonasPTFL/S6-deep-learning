@@ -16,7 +16,8 @@ class ModelIteration:
             train_ds=None,
             val_ds=None,
             epochs: int = None,
-            iteration_name: str = default_values.model_iteration_name
+            iteration_name: str = default_values.model_iteration_name,
+            allowed_to_run: bool = True
     ):
         """
         Constructs model iteration with given model, training and validation dataset
@@ -24,11 +25,14 @@ class ModelIteration:
         :param train_ds: the training dataset, if None, the default dataset is loaded
         :param val_ds: the validation dataset, if None, the default dataset is loaded
         :param epochs: the number of epochs to train the model or None to use default value
+        :param iteration_name: the name of the iteration (aka model_id)
+        :param allowed_to_run: whether to allow model training or validation dataset
         """
         self.data_loader = data_loader
         self.epochs = epochs
         self.iteration_name = iteration_name
         self.creation_timestamp = datetime.now()
+        self.allowed_to_run = allowed_to_run
         # load datasets or use given datasets
         if train_ds is None or val_ds is None:
             self._load_datasets()
@@ -38,6 +42,9 @@ class ModelIteration:
 
         # assign model
         self.model_architecture = model_architecture
+
+    def is_allowed_to_run(self):
+        return self.allowed_to_run
 
     def run(self) -> None:
         """
@@ -83,4 +90,5 @@ class ModelIteration:
         """
         Evaluates the model
         """
-        model_analyzer.model_evaluate(self.model_architecture, self.history, self.val_ds)
+        model_analyzer.model_evaluate(self.model_architecture, self.history, self.val_ds, model_id=self.iteration_name,
+                                      timestamp=self.creation_timestamp)

@@ -1,15 +1,11 @@
-import src.model_code.mode_iteration as mode_iteration
+from src.model_code.mode_iteration import ModelIteration
 import tensorflow as tf
 
 from src.model_code.model_architecture import ModelArchitecture
 from src.util import constants
 
-if __name__ == '__main__':
-    # Print the gpus available (test for local development)
-    print("GPUs available: ", tf.config.list_physical_devices('GPU'))
-
-    # create model iteration
-    model_iteration = mode_iteration.ModelIteration(
+model_iterations = [
+    ModelIteration(
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
@@ -35,7 +31,15 @@ if __name__ == '__main__':
             metrics=["accuracy"]
         ),
         iteration_name='stoic_axolotl_6_2',
-        epochs=10
+        epochs=10,
+        allowed_to_run=True
     )
-    # run model iteration
-    model_iteration.run()
+
+]
+
+if __name__ == '__main__':
+    # Print the gpus available (test for local development)
+    print("GPUs available: ", tf.config.list_physical_devices('GPU'))
+    for model_iteration in model_iterations:
+        if model_iteration.is_allowed_to_run():
+            model_iteration.run()
