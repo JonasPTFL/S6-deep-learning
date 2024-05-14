@@ -56,3 +56,18 @@ project_name/
 ## Branching Structure
 
 ![Branching Structure](docs/branching.png)
+
+## Issue: Wrongly allocated memory
+
+If an error occurs which says something like being unable to allocate X GiB of memory,
+please make the following changes on your IDE (Pycharm only):
+
+Make sure you have this environment variable in your 
+run-config:
+
+```markdown
+XLA_FLAGS=--xla_gpu_strict_conv_algorithm_picker=false
+```
+
+It will remove that issue, hence it will decrease your 
+model's performance a little bit.
