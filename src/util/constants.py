@@ -30,8 +30,12 @@ CHOSEN_CLASSES_PATH = path_from_base('chosen_classes.txt')
 REMOVED_IMAGES_STORAGE_PATH = path_from_base('removed_images.txt')
 
 # model
-MODEL_DIRECTORY = path_from_base('models/saved_model/')
+MODEL_RELATIVE_PATH = 'models/saved_model/'
+MODEL_DIRECTORY = path_from_base(MODEL_RELATIVE_PATH)
 CHECKPOINT_MODEL_DIRECTORY = path_from_base('models/checkpoints/')
 
 # log directory for tensorboard
 LOG_DIR = path_from_base('logs/fit/')
+
+# iteration reports
+MARKDOWN_REPORT_FILE_NAME = 'iteration_report.md'

@@ -7,8 +7,8 @@ class ModelArchitecture:
     def __init__(
             self,
             architecture: tf.keras.Sequential = None,
-            optimizer=default_values.optimizer,
-            loss=default_values.loss,
+            optimizer: tf.keras.optimizers.Optimizer = default_values.optimizer,
+            loss: tf.keras.losses.Loss = default_values.loss,
             metrics=None
     ):
         """
@@ -32,6 +32,9 @@ class ModelArchitecture:
             loss=loss,
             metrics=metrics
         )
+        self.metrics = metrics
+        self.loss = loss
+        self.optimizer = optimizer
 
     def get_model(self) -> tf.keras.Sequential:
         """

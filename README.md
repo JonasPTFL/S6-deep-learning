@@ -71,3 +71,11 @@ XLA_FLAGS=--xla_gpu_strict_conv_algorithm_picker=false
 
 It will remove that issue, hence it will decrease your 
 model's performance a little bit.
+
+
+## Tensorboard
+In order to run tensorboard, you need to run the following command in the terminal inside the project root folder after starting the program:
+
+```markdown
+tensorboard --logdir=logs/fit
+```

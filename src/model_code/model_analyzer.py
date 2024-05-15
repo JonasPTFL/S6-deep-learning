@@ -15,7 +15,7 @@ def model_evaluate(
         val_ds: tf.data.Dataset,
         model_id,
         timestamp
-) -> None:
+) -> str:
     """
     Displays the model architecture
     :param model_architecture: the model to display
@@ -23,6 +23,7 @@ def model_evaluate(
     :param val_ds: the validation dataset
     :param model_id: the model id, or model iteration name
     :param timestamp: the timestamp when the model was created
+    :return: the path to the directory where the evaluation reports are stored
     """
     model = model_architecture.get_model()
     model.summary()
@@ -51,3 +52,4 @@ def model_evaluate(
     else:
         print(f"Directory {path_to_dir} already exists")
     evaluator.evaluate()
+    return path_to_dir

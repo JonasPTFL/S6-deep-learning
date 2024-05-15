@@ -21,8 +21,7 @@ def model_train(
     if epochs is None:
         epochs = default_values.epochs
 
-    # start tensorboard with the following command:
-    # tensorboard --logdir logs/fit
+    # add tensorboard callback
     tensorboard = tf.keras.callbacks.TensorBoard(log_dir=constants.LOG_DIR)
 
     return model.get_model().fit(
