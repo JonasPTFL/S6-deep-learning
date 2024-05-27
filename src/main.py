@@ -3,8 +3,12 @@ import sys
 
 sys.path.append(os.getcwd())
 
+import src.model_code.model_persistence as model_persistence
+import src.model_code.model_prediction as model_prediction
 from src.model_code.mode_iteration import ModelIteration
 import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
 
 from src.model_code.model_architecture import ModelArchitecture
 from src.util import constants
@@ -303,6 +307,22 @@ model_iterations = [
     )
 
 ]
+
+def prediction_test(model_name, file_name):
+    model = model_persistence.model_load(model_name) 
+    prediction = model_prediction.model_predict(model, file_name)
+
+    classes = open(constants.CHOSEN_CLASSES_PATH).read().splitlines()
+    y_pos = np.arange(len(classes))
+
+    plt.bar(y_pos, prediction.flatten(), align='center', alpha=0.5)
+    plt.xticks(y_pos, classes, rotation=90)
+    plt.ylabel('Output')
+    plt.title('Prediction')
+    plt.show()
+
+    print(prediction)
+
 
 if __name__ == '__main__':
     # Print the gpus available (test for local development)
