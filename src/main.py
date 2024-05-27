@@ -14,7 +14,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -43,7 +42,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -75,7 +73,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -107,7 +104,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -142,7 +138,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -179,7 +174,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -214,7 +208,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -243,7 +236,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -272,7 +264,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -305,7 +296,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
