@@ -3,7 +3,8 @@ from abc import ABC
 import matplotlib.pyplot as plt
 import seaborn as sns
 import tensorflow as tf
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
 
 from src.evaluation.metrics.abstract_metric import AbstractMetric
 
@@ -18,16 +19,16 @@ def plot_confusion_matrix(y_true, y_pred, classes, model_id, timestamp):
     :param timestamp: the timestamp of the model.
     :return:
     """
-    plt.figure(figsize=(15, 15))
     cm = confusion_matrix(y_true, y_pred)
-    sns.heatmap(cm, annot=True, cmap="Blues", fmt='g', xticklabels=classes, yticklabels=classes)
-    plt.title(f"Confusion Matrix of ModelId: {model_id}", fontweight='bold', fontsize=20)
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-    # Move x-axis labels to the top
-    plt.tick_params(axis='x', which='both', bottom=False, top=True, labelbottom=False, labeltop=True, labelrotation=90)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm,
+                                  display_labels=classes)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=classes)
 
-    plt.savefig(f"../reports/{model_id}/{timestamp}/confusion_matrix.png")
+    # Anpassen der Figurengröße und Rotieren der Labels
+    fig, ax = plt.subplots(figsize=(25, 25))  # Die Figurgröße kann nach Bedarf angepasst werden
+    disp.plot(ax=ax)
+    plt.xticks(rotation=90)  # Drehen der xtick Labels um 90 Grad
+    plt.yticks(rotation=0)  # Drehen der ytick Labels um 0 Grad (optional, da es standardmäßig so ist)
     plt.show()
 
 
@@ -44,3 +45,4 @@ class ConfusionMatrix(AbstractMetric, ABC):
         y_true = [label for images, labels in test_dataset for image, label in zip(images, labels)]
         y_pred = model.predict(test_dataset).argmax(axis=1)
         plot_confusion_matrix(y_true, y_pred, class_names, model_id, model_timestamp)
+
