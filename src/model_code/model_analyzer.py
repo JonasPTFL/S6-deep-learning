@@ -37,7 +37,6 @@ def model_evaluate(
         history,
         [
             ConfusionMatrix(),
-            FalseClassifiedImages(),
             History(),
             StandardEvaluate(),
         ],
