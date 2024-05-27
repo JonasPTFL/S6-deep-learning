@@ -42,7 +42,7 @@ class DataLoader:
         :param subset: the subset of the dataset to load
         :return: the dataset
         """
-        return tf.keras.utils.image_dataset_from_directory(
+        current_dataset = tf.keras.utils.image_dataset_from_directory(
             constants.ALL_IMAGES_PATH,
             validation_split=self.validation_split,
             subset=subset,
@@ -50,3 +50,8 @@ class DataLoader:
             image_size=(self.img_height, self.img_width),
             batch_size=self.batch_size
         )
+
+        normalization_layer = tf.keras.layers.Rescaling(1. / 255)
+        normalized_dataset = current_dataset.map(lambda x, y: (normalization_layer(x), y))
+
+        return normalized_dataset
