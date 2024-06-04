@@ -6,7 +6,8 @@ import src.util.default_values as default_values
 
 # DataLoader class, provides methods to load training and validation dataset
 class DataLoader:
-    def __init__(self, batch_size=default_values.batch_size, img_height=default_values.img_height, img_width=default_values.img_width,
+    def __init__(self, batch_size=default_values.batch_size, img_height=default_values.img_height,
+                 img_width=default_values.img_width,
                  seed=default_values.seed, validation_split=default_values.validation_split):
         """
         Constructor for DataLoader class. Sets parameters for loading dataset and uses default values if not provided.
@@ -42,7 +43,7 @@ class DataLoader:
         :param subset: the subset of the dataset to load
         :return: the dataset
         """
-        return tf.keras.utils.image_dataset_from_directory(
+        current_dataset = tf.keras.utils.image_dataset_from_directory(
             constants.ALL_IMAGES_PATH,
             validation_split=self.validation_split,
             subset=subset,
@@ -50,3 +51,8 @@ class DataLoader:
             image_size=(self.img_height, self.img_width),
             batch_size=self.batch_size
         )
+
+        normalization_layer = tf.keras.layers.Rescaling(1. / 255)
+        normalized_dataset = current_dataset.map(lambda x, y: (normalization_layer(x), y))
+
+        return normalized_dataset
