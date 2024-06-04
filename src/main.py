@@ -14,7 +14,6 @@ model_iterations = [
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -36,14 +35,13 @@ model_iterations = [
             metrics=["accuracy"]
         ),
         iteration_name='stoic_axolotl_6_2',
-        epochs=10,
+        epochs=100,
         allowed_to_run=False
     ),
     ModelIteration(
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -68,14 +66,13 @@ model_iterations = [
             metrics=["accuracy"]
         ),
         iteration_name='calm_alpaca_7_3',
-        epochs=30,
+        epochs=100,
         allowed_to_run=False
     ),
     ModelIteration(
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -100,14 +97,13 @@ model_iterations = [
             metrics=["accuracy"]
         ),
         iteration_name='sweet_hedgehog_7_3_bn',
-        epochs=10,
+        epochs=100,
         allowed_to_run=False
     ),
     ModelIteration(
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -135,14 +131,13 @@ model_iterations = [
             metrics=["accuracy"]
         ),
         iteration_name='angry_dalmatian_7_3_bn',
-        epochs=20,
+        epochs=100,
         allowed_to_run=False
     ),
     ModelIteration(
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -167,19 +162,18 @@ model_iterations = [
                     tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
                 ]
             ),
-            optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
             loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
             metrics=["accuracy"]
         ),
         iteration_name='friendly_elf_10_2_bn_do',
-        epochs=20,
+        epochs=100,
         allowed_to_run=False
     ),
     ModelIteration(
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -202,19 +196,18 @@ model_iterations = [
                     tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
                 ]
             ),
-            optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
             loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
             metrics=["accuracy"]
         ),
         iteration_name='hungry_chicken_10_2_bn_do',
-        epochs=30,
+        epochs=100,
         allowed_to_run=False
     ),
     ModelIteration(
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -231,19 +224,18 @@ model_iterations = [
                     tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
                 ]
             ),
-            optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
             loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
             metrics=["accuracy"]
         ),
         iteration_name='arrogant_dwarf_6_2_l2',
-        epochs=40,
+        epochs=100,
         allowed_to_run=False
     ),
     ModelIteration(
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -265,14 +257,13 @@ model_iterations = [
             metrics=["accuracy"]
         ),
         iteration_name='sporty_kangaroo_6_2_l2',
-        epochs=40,
+        epochs=100,
         allowed_to_run=False
     ),
     ModelIteration(
         model_architecture=ModelArchitecture(
             architecture=tf.keras.Sequential(
                 [
-                    tf.keras.layers.Rescaling(1. / 255),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.Conv2D(32, 3, activation='relu'),
                     tf.keras.layers.MaxPooling2D(),
@@ -297,11 +288,179 @@ model_iterations = [
             loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
             metrics=["accuracy"]
         ),
-        iteration_name='big_elefant_6_2_l2',
-        epochs=3,
+        iteration_name='big_elefant_10_2_l2',
+        epochs=100,
+        allowed_to_run=False
+    ),
+    ModelIteration(
+        model_architecture=ModelArchitecture(
+            architecture=tf.keras.Sequential(
+                [
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Flatten(),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+                    tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+                ]
+            ),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=["accuracy"]
+        ),
+        iteration_name='annoying_tortoise_10_3_l2',
+        epochs=100,
+        allowed_to_run=False
+    ),
+    ModelIteration(
+        model_architecture=ModelArchitecture(
+            architecture=tf.keras.Sequential(
+                [
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Flatten(),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+                    tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+                ]
+            ),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=["accuracy"]
+        ),
+        iteration_name='sleepy_tortoise_10_3',
+        epochs=10,
+        allowed_to_run=False
+    ),
+    ModelIteration(
+        model_architecture=ModelArchitecture(
+            architecture=tf.keras.Sequential(
+                [
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Flatten(),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l1_l2'),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l1_l2'),
+                    tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+                ]
+            ),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=["accuracy"]
+        ),
+        iteration_name='crazy_diamond_10_3',
+        epochs=10,
+        allowed_to_run=False
+    ),
+    ModelIteration(
+        model_architecture=ModelArchitecture(
+            architecture=tf.keras.Sequential(
+                [
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Flatten(),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+                    tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+                ]
+            ),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            metrics=["accuracy"]
+        ),
+        iteration_name='howling_wolf_14_3',
+        epochs=10,
         allowed_to_run=True
     )
-
 ]
 
 if __name__ == '__main__':
@@ -310,4 +469,3 @@ if __name__ == '__main__':
     for model_iteration in model_iterations:
         if model_iteration.is_allowed_to_run():
             model_iteration.run()
-
