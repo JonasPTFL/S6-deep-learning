@@ -38,9 +38,8 @@ class ModelIteration:
         self.creation_timestamp = datetime.now()
         self.allowed_to_run = allowed_to_run
         self.should_write_iteration_report = should_write_iteration_report
-        
-        # load datasets or use given datasets if this instance is allowed to run
         if self.is_allowed_to_run():
+            # load datasets or use given datasets
             if train_ds is None or val_ds is None:
                 self._load_datasets()
             else:
@@ -135,6 +134,6 @@ class ModelIteration:
         Evaluates the model
         :return: the path to the directory where the evaluation reports are stored
         """
-        return model_analyzer.model_evaluate(self.model_architecture, self.history, self.val_ds,
+        return model_analyzer.model_evaluate(self.model_architecture, self.history, self.val_ds, self.train_ds,
                                              model_id=self.iteration_name,
                                              timestamp=self.creation_timestamp)
