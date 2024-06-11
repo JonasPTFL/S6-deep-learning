@@ -4,12 +4,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import tensorflow as tf
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from src.util import constants
+import numpy as np
 
 
 from src.evaluation.metrics.abstract_metric import AbstractMetric
 
 
-def plot_confusion_matrix(y_true, y_pred, classes, model_id, timestamp):
+def plot_confusion_matrix(y_true, y_pred, classes, model_id, timestamp,description):
     """
     This function plots the confusion matrix as pyplot plot.
     :param y_true: The true labels.
@@ -24,12 +26,12 @@ def plot_confusion_matrix(y_true, y_pred, classes, model_id, timestamp):
                                   display_labels=classes)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=classes)
 
-    # Anpassen der Figurengröße und Rotieren der Labels
-    fig, ax = plt.subplots(figsize=(25, 25))  # Die Figurgröße kann nach Bedarf angepasst werden
+    fig, ax = plt.subplots(figsize=(25, 25))
     disp.plot(ax=ax)
-    plt.xticks(rotation=90)  # Drehen der xtick Labels um 90 Grad
-    plt.yticks(rotation=0)  # Drehen der ytick Labels um 0 Grad (optional, da es standardmäßig so ist)
-    plt.show()
+    plt.xticks(rotation=90)
+    plt.yticks(rotation=0)
+    plt.savefig(f"../reports/{model_id}/{timestamp}/confusion_matrix_{description}.png")
+    plt.clf()
 
 
 class ConfusionMatrix(AbstractMetric, ABC):
@@ -39,10 +41,17 @@ class ConfusionMatrix(AbstractMetric, ABC):
 
     def calculate_metric(self, model: tf.keras.Model = None,
                          test_dataset: tf.data.Dataset = None,
+                         train_dataset: tf.data.Dataset = None,
                          model_id: str = "-1", model_history=None,
                          model_timestamp=None):
-        class_names = test_dataset.class_names
+        class_names = constants.CLASS_NAMES
         y_true = [label for images, labels in test_dataset for image, label in zip(images, labels)]
+        y_true = np.argmax(y_true, axis=1)
         y_pred = model.predict(test_dataset).argmax(axis=1)
-        plot_confusion_matrix(y_true, y_pred, class_names, model_id, model_timestamp)
-
+        plot_confusion_matrix(y_true, y_pred, class_names, model_id, model_timestamp, "test")
+        plt.clf()
+        y_true = [label for images, labels in train_dataset for image, label in zip(images, labels)]
+        y_true = np.argmax(y_true, axis=1)
+        y_pred = model.predict(train_dataset).argmax(axis=1)
+        plot_confusion_matrix(y_true, y_pred, class_names, model_id, model_timestamp, "train")
+        plt.clf()
