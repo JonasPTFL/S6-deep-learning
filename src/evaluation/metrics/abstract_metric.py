@@ -11,6 +11,7 @@ class AbstractMetric(ABC):
     @abstractmethod
     def calculate_metric(self, model: tf.keras.Model = None,
                          test_dataset: tf.data.Dataset = None,
+                         train_dataset: tf.data.Dataset = None,
                          model_id: str = "-1", model_history=None,
                          model_timestamp=None):
         """
@@ -21,6 +22,7 @@ class AbstractMetric(ABC):
         :param model_id: The id of the deep learning model if needed, else default value
         :param model: The model the metric needs to be evaluated on
         :param test_dataset: The test data the metric needs to be evaluated on
+        :param train_dataset: The train dataset to show something on
         :param model: The time the training has been started
         """
         pass
