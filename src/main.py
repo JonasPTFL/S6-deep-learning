@@ -9,6 +9,51 @@ import tensorflow as tf
 from src.model_code.model_architecture import ModelArchitecture
 from src.util import constants
 
+vgg16 = tf.keras.applications.VGG16(include_top=False,
+                                    weights="imagenet",
+                                    input_shape=(224,224,3),
+                                    pooling=None)
+
+for layer in vgg16.layers:
+    layer.trainable = False
+
+transfer_learning_model_1.add(vgg16)
+transfer_learning_model_1.add(tf.keras.layers.Flatten())
+transfer_learning_model_1.add(tf.keras.layers.Dense(1024, activation="relu"))
+transfer_learning_model_1.add(tf.keras.layers.Dense(constants.NUM_CLASSES, activation="softmax"))
+
+
+transfer_learning_model_2 = tf.keras.Sequential()
+
+vgg19 = tf.keras.applications.VGG19(include_top=False,
+                                    weights="imagenet",
+                                    input_shape=(224,224,3),
+                                    pooling=None)
+
+for layer in vgg19.layers:
+    layer.trainable = False
+
+transfer_learning_model_2.add(vgg19)
+transfer_learning_model_2.add(tf.keras.layers.Flatten())
+transfer_learning_model_2.add(tf.keras.layers.Dense(1024, activation="relu"))
+transfer_learning_model_2.add(tf.keras.layers.Dense(constants.NUM_CLASSES, activation="softmax"))
+
+
+transfer_learning_model_3 = tf.keras.Sequential()
+
+resnet101 = tf.keras.applications.ResNet101(include_top=False,
+                                    weights="imagenet",
+                                    input_shape=(224,224,3),
+                                    pooling=None)
+
+for layer in resnet101.layers:
+    layer.trainable = False
+
+transfer_learning_model_3.add(resnet101)
+transfer_learning_model_3.add(tf.keras.layers.Flatten())
+transfer_learning_model_3.add(tf.keras.layers.Dense(1024, activation="relu"))
+transfer_learning_model_3.add(tf.keras.layers.Dense(constants.NUM_CLASSES, activation="softmax"))
+
 model_iterations = [
     ModelIteration(
         model_architecture=ModelArchitecture(
@@ -459,6 +504,39 @@ model_iterations = [
         ),
         iteration_name='howling_wolf_14_3',
         epochs=10,
+        allowed_to_run=True
+    ),
+    ModelIteration(
+        model_architecture=ModelArchitecture(
+            architecture=transfer_learning_model_1,
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+            loss=tf.keras.losses.CategoricalCrossentropy(),
+            metrics=["accuracy"]
+        ),
+        iteration_name='transfer_learning_vgg16',
+        epochs=100,
+        allowed_to_run=True
+    ),
+    ModelIteration(
+        model_architecture=ModelArchitecture(
+            architecture=transfer_learning_model_2,
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+            loss=tf.keras.losses.CategoricalCrossentropy(),
+            metrics=["accuracy"]
+        ),
+        iteration_name='transfer_learning_vgg19',
+        epochs=100,
+        allowed_to_run=True
+    ),
+    ModelIteration(
+        model_architecture=ModelArchitecture(
+            architecture=transfer_learning_model_3,
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+            loss=tf.keras.losses.CategoricalCrossentropy(),
+            metrics=["accuracy"]
+        ),
+        iteration_name='transfer_learning_resnet101',
+        epochs=100,
         allowed_to_run=True
     )
 ]
