@@ -2,7 +2,7 @@ from abc import ABC
 
 
 class Evaluator(ABC):
-    def __init__(self, model, test_data, history, metrics, model_id, timestamp):
+    def __init__(self, model, test_data, train_data, history, metrics, model_id, timestamp):
         """
         This class is used to evaluate a model against a set of test data.
         The user is able to pass in a list of metrics to evaluate against this specific
@@ -19,6 +19,7 @@ class Evaluator(ABC):
         self.history = history
         self.model_id = model_id
         self.timestamp = timestamp
+        self.train_data = train_data
         return
 
     def evaluate(self):
@@ -30,6 +31,7 @@ class Evaluator(ABC):
         for metric in self.metrics:
             metric.calculate_metric(self.model,
                                     self.test_data,
+                                    self.train_data,
                                     model_id=self.model_id,
                                     model_history=self.history,
                                     model_timestamp=self.timestamp)
