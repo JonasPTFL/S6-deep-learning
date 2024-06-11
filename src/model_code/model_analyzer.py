@@ -13,6 +13,7 @@ def model_evaluate(
         model_architecture: ma.ModelArchitecture,
         history: tf.keras.callbacks.History,
         val_ds: tf.data.Dataset,
+        train_ds: tf.data.Dataset,
         model_id,
         timestamp
 ) -> str:
@@ -23,6 +24,7 @@ def model_evaluate(
     :param val_ds: the validation dataset
     :param model_id: the model id, or model iteration name
     :param timestamp: the timestamp when the model was created
+    :param train_ds: the Train Dataset
     :return: the path to the directory where the evaluation reports are stored
     """
     model = model_architecture.get_model()
@@ -34,6 +36,7 @@ def model_evaluate(
     evaluator = Evaluator(
         model,
         val_ds,
+        train_ds,
         history,
         [
             ConfusionMatrix(),
