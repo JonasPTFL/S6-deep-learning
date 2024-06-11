@@ -39,3 +39,11 @@ LOG_DIR = path_from_base('logs/fit/')
 
 # iteration reports
 MARKDOWN_REPORT_FILE_NAME = 'iteration_report.md'
+
+CLASS_NAMES = ["apple_pie", "baklava", "beignets", "breakfast_burrito", "cannoli", "carrot_cake", "cheese_plate",
+          "chicken_curry",
+          "croque_madame", "cup_cakes", "donuts", "eggs_benedict", "escargots", "foie_gras", "garlic_bread",
+          "greek_salad", "lasagna",
+          "lobster_bisque", "macarons", "nachos", "pad_thai", "paella", "pancakes", "panna_cotta", "prime_rib",
+          "scallops", "spaghetti_carbonara",
+          "spring_rolls", "sushi", "tuna_tartare"]
