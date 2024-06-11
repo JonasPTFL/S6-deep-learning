@@ -526,6 +526,53 @@ model_iterations = [
     ),
     ModelIteration(
         model_architecture=ModelArchitecture(
+            architecture=tf.keras.Sequential(
+                [
+                    tf.keras.layers.RandomFlip("horizontal"),
+                    tf.keras.layers.RandomRotation(0.2),
+                    tf.keras.layers.RandomZoom(height_factor=(0.2,0.3),width_factor=(0.2,0.3)),
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(32, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(64, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(128, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(256, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.Conv2D(512, 3, activation='relu'),
+                    tf.keras.layers.BatchNormalization(),
+                    tf.keras.layers.MaxPooling2D(),
+                    tf.keras.layers.Flatten(),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+                    tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+                    tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+                ]
+            ),
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+            loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
+            metrics=["accuracy"]
+        ),
+        iteration_name='great_sorcerer_10_3',
+        epochs=100,
+        allowed_to_run=False
+    ),
+    ModelIteration(
+        model_architecture=ModelArchitecture(
             architecture=transfer_learning_model_1,
             optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
             loss=tf.keras.losses.CategoricalCrossentropy(),
