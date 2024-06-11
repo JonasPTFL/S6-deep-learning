@@ -49,7 +49,8 @@ class DataLoader:
             subset=subset,
             seed=self.seed,
             image_size=(self.img_height, self.img_width),
-            batch_size=self.batch_size
+            batch_size=self.batch_size,
+            label_mode="categorical"
         )
 
         normalization_layer = tf.keras.layers.Rescaling(1. / 255)
