@@ -1,7 +1,9 @@
 import random
 from abc import ABC
 
+import numpy as np
 import tensorflow as tf
+import src.util.constants as constants
 from matplotlib import pyplot as plt
 
 from src.evaluation.metrics.abstract_metric import AbstractMetric
@@ -43,7 +45,7 @@ def plot_false_images(false_images, model_id, timestamp):
                      fontweight='bold')
         plt.tight_layout()
         plt.savefig(f"../reports/{model_id}/{timestamp}/false_classified_images_{count}.png")
-        plt.show()
+        plt.clf()
 
 
 def filter_out_correct_classified_images(dataset, pred_labels):
@@ -54,13 +56,14 @@ def filter_out_correct_classified_images(dataset, pred_labels):
     :return: A list of false classified images, its true label and its predicted label as triples
     """
     index = 0
-    class_names = dataset.class_names
+    class_names = constants.CLASS_NAMES
     false_images = []  # Accumulate false images here
     for images, labels in dataset.take(len(dataset)):
         for image, true_label in zip(images, labels):
+            true_label = np.argmax(true_label, axis=1)
             if true_label != pred_labels[index]:
                 false_images.append((image.numpy().astype("uint8"), class_names[pred_labels[index]],
-                                     class_names[true_label]))
+                                     class_names[true_label.argmax(axis=1)]))
             index += 1
     return false_images
 
@@ -72,8 +75,10 @@ class FalseClassifiedImages(AbstractMetric, ABC):
 
     def calculate_metric(self, model: tf.keras.Model = None,
                          test_dataset: tf.data.Dataset = None,
+                         train_dataset: tf.data.Dataset = None,
                          model_id: str = "-1", model_history=None,
                          model_timestamp=None):
         y_pred_labels = model.predict(test_dataset).argmax(axis=1)
         filter_and_plot(test_dataset, y_pred_labels, model_id, model_timestamp)
+        plt.clf()
         return
