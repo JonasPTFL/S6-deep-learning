@@ -27,10 +27,20 @@ transfer_learning_model.add(tf.keras.layers.Flatten())
 transfer_learning_model.add(tf.keras.layers.Dense(1024, activation='relu'))
 transfer_learning_model.add(tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax'))
 
+transfer_learning_model_4 = tf.keras.Sequential()
+transfer_learning_model_4.add(tf.keras.layers.Flatten())
+transfer_learning_model_4.add(tf.keras.layers.Dense(4096, activation="relu", kernel_regularizer='l2'))
+transfer_learning_model_4.add(tf.keras.layers.Dense(4096, activation="relu", kernel_regularizer='l2'))
+transfer_learning_model_4.add(tf.keras.layers.Dense(constants.NUM_CLASSES, activation="softmax"))
+
 vgg16 = tf.keras.applications.VGG16(include_top=False,
                                     weights="imagenet",
                                     input_shape=(224,224,3),
                                     pooling=None)
+
+
+
+
 
 for layer in vgg16.layers:
     layer.trainable = False
@@ -696,6 +706,17 @@ model_iterations = [
         ),
         iteration_name='transfer_learning_rn50_2',
         epochs=100,
+        allowed_to_run=True
+    ),
+    ModelIteration(
+        model_architecture=ModelArchitecture(
+            architecture=transfer_learning_model_4,
+            optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+            loss=tf.keras.losses.CategoricalCrossentropy(),
+            metrics=["accuracy"]
+        ),
+        iteration_name='transfer_learning_rn50_3',
+        epochs=300,
         allowed_to_run=True
     )
 ]
