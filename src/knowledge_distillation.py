@@ -67,19 +67,24 @@ class Distiller(tf.keras.Model):
 # Create the student
 student = tf.keras.Sequential(
     [
+        tf.keras.layers.Conv2D(8, 3, activation='relu'),
+        tf.keras.layers.Conv2D(8, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Conv2D(32, 3, activation='relu'),
         tf.keras.layers.Conv2D(32, 3, activation='relu'),
         tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Conv2D(64, 3, activation='relu'),
-        tf.keras.layers.MaxPooling2D(),
-        tf.keras.layers.Conv2D(64, 3, activation='relu'),
-        tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Conv2D(64, 3, activation='relu'),
         tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Conv2D(128, 3, activation='relu'),
+        tf.keras.layers.Conv2D(128, 3, activation='relu'),
         tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(1024, activation='relu'),
+        tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+        tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
         tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
     ],
     name="student",
@@ -106,13 +111,15 @@ distiller.compile(
 distiller.fit(
     loader.load_training_data(),
     validation_data=loader.load_validation_data(),
-    epochs=3,
+    epochs=2,
     callbacks=[model_persistence.model_checkpoint_callback()]
 )
 
 # Evaluate student on test dataset
 distiller.evaluate(loader.load_validation_data())
 
+# save student
+model_persistence.model_save_sequential(student, "perfect_wolf_knowledge_distillation_student_1.keras")
 
 # Train student as done usually
 student_scratch.compile(
@@ -122,7 +129,7 @@ student_scratch.compile(
 )
 
 # save distiller
-model_persistence.model_save_sequential(distiller, "perfect_wolf_knowledge_distillation_1.keras")
+model_persistence.model_save_sequential(distiller, "perfect_wolf_knowledge_distillation_distiller_1.keras")
 
 
 # Train and evaluate student trained from scratch.
@@ -130,7 +137,7 @@ model_persistence.model_save_sequential(distiller, "perfect_wolf_knowledge_disti
 distiller.fit(
     loader.load_training_data(),
     validation_data=loader.load_validation_data(),
-    epochs=3,
+    epochs=2,
     callbacks=[model_persistence.model_checkpoint_callback()]
 )
 student_scratch.evaluate(loader.load_validation_data())
