@@ -8,9 +8,10 @@ import numpy as np
 import src.model_code.model_persistence as model_persistence
 import src.util.constants as constants
 import src.model_code.data_loader as data_loader
-
+from src.evaluation.metrics.history import History
 
 loader = data_loader.DataLoader()
+
 
 class Distiller(tf.keras.Model):
     def __init__(self, student, teacher):
@@ -53,7 +54,7 @@ class Distiller(tf.keras.Model):
         student_loss = self.student_loss_fn(y, y_pred)
 
         distillation_loss = self.distillation_loss_fn(
-            tf.keras.activations.softmax(teacher_pred / self.temperature, axis=1), # evtl tf.nn.softmax
+            tf.keras.activations.softmax(teacher_pred / self.temperature, axis=1),  # evtl tf.nn.softmax
             tf.keras.activations.softmax(y_pred / self.temperature, axis=1),
         ) * (self.temperature ** 2)
 
@@ -63,81 +64,312 @@ class Distiller(tf.keras.Model):
     def call(self, x):
         return self.student(x)
 
+teacher = model_persistence.model_load("perfect_wolf_10_3_20240611_143102.keras")
+
+
+
+"""
+-------------------------------------------------------
+Student 1
+-------------------------------------------------------
+"""
 
 # Create the student
-student = tf.keras.Sequential(
+student_1 = tf.keras.Sequential(
     [
-        tf.keras.layers.Conv2D(8, 3, activation='relu'),
-        tf.keras.layers.Conv2D(8, 3, activation='relu'),
-        tf.keras.layers.MaxPooling2D(),
-        tf.keras.layers.Conv2D(16, 3, activation='relu'),
-        tf.keras.layers.Conv2D(16, 3, activation='relu'),
-        tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Conv2D(32, 3, activation='relu'),
         tf.keras.layers.Conv2D(32, 3, activation='relu'),
         tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Conv2D(64, 3, activation='relu'),
         tf.keras.layers.MaxPooling2D(),
-        tf.keras.layers.Conv2D(128, 3, activation='relu'),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Conv2D(128, 3, activation='relu'),
         tf.keras.layers.MaxPooling2D(),
         tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
-        tf.keras.layers.Dense(4096, activation='relu', kernel_regularizer='l2'),
+        tf.keras.layers.Dense(1024, activation='relu'),
         tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
     ],
     name="student",
 )
 
 # Clone student for later comparison
-student_scratch = tf.keras.models.clone_model(student)
-
-teacher = model_persistence.model_load("perfect_wolf_10_3_20240611_143102.keras")
+student_scratch_1 = tf.keras.Sequential(
+    [
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(128, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(1024, activation='relu'),
+        tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+    ],
+    name="student_without_knowledge_distillation"
+)
 
 
 # Initialize and compile distiller
-distiller = Distiller(student=student, teacher=teacher)
-distiller.compile(
+distiller_1 = Distiller(student=student_1, teacher=teacher)
+distiller_1.compile(
     optimizer=tf.keras.optimizers.Adam(),
     metrics=["accuracy"],
-    student_loss_fn=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
+    student_loss_fn=tf.keras.losses.CategoricalCrossentropy(),
     distillation_loss_fn=tf.keras.losses.KLDivergence(),
     alpha=0.1,
     temperature=10,
 )
 
 # Distill teacher to student
-distiller.fit(
+distiller_1.fit(
     loader.load_training_data(),
     validation_data=loader.load_validation_data(),
-    epochs=2,
+    epochs=20,
     callbacks=[model_persistence.model_checkpoint_callback()]
 )
 
 # Evaluate student on test dataset
-distiller.evaluate(loader.load_validation_data())
+distiller_1.evaluate(loader.load_validation_data())
 
 # save student
-model_persistence.model_save_sequential(student, "perfect_wolf_knowledge_distillation_student_1.keras")
+model_persistence.model_save_sequential(student_1, "student_1.keras")
+# save distiller
+model_persistence.model_save_sequential(distiller_1, "distiller_1.keras")
 
 # Train student as done usually
-student_scratch.compile(
+student_scratch_1.compile(
     optimizer=tf.keras.optimizers.Adam(),
-    loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
+    loss=tf.keras.losses.CategoricalCrossentropy(),
     metrics=["accuracy"],
 )
 
+
+# Train and evaluate student trained from scratch.
+#
+student_scratch_1.fit(
+    loader.load_training_data(),
+    validation_data=loader.load_validation_data(),
+    epochs=20,
+    callbacks=[model_persistence.model_checkpoint_callback()]
+)
+model_persistence.model_save_sequential(student_scratch_1, "student_scratch_1.keras")
+student_scratch_1.evaluate(loader.load_validation_data())
+
+
+
+"""
+-------------------------------------------------------
+Student 2
+-------------------------------------------------------
+"""
+
+# Create the student
+student_2 = tf.keras.Sequential(
+    [
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(4096, activation='relu'),
+        tf.keras.layers.Dense(4096, activation='relu'),
+        tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+    ],
+    name="student",
+)
+
+# Clone student for later comparison
+student_scratch_2 = tf.keras.Sequential(
+    [
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(4096, activation='relu'),
+        tf.keras.layers.Dense(4096, activation='relu'),
+        tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+
+    ],
+    name="student_without_knowledge_distillation"
+)
+
+
+# Initialize and compile distiller
+distiller_2 = Distiller(student=student_2, teacher=teacher)
+distiller_2.compile(
+    optimizer=tf.keras.optimizers.Adam(),
+    metrics=["accuracy"],
+    student_loss_fn=tf.keras.losses.CategoricalCrossentropy(),
+    distillation_loss_fn=tf.keras.losses.KLDivergence(),
+    alpha=0.1,
+    temperature=10,
+)
+
+# Distill teacher to student
+distiller_2.fit(
+    loader.load_training_data(),
+    validation_data=loader.load_validation_data(),
+    epochs=20,
+    callbacks=[model_persistence.model_checkpoint_callback()]
+)
+
+# Evaluate student on test dataset
+distiller_2.evaluate(loader.load_validation_data())
+
+# save student
+model_persistence.model_save_sequential(student_2, "student_2.keras")
 # save distiller
-model_persistence.model_save_sequential(distiller, "perfect_wolf_knowledge_distillation_distiller_1.keras")
+model_persistence.model_save_sequential(distiller_2, "distiller_2.keras")
+
+# Train student as done usually
+student_scratch_2.compile(
+    optimizer=tf.keras.optimizers.Adam(),
+    loss=tf.keras.losses.CategoricalCrossentropy(),
+    metrics=["accuracy"],
+)
 
 
 # Train and evaluate student trained from scratch.
-
-distiller.fit(
+#
+student_scratch_2.fit(
     loader.load_training_data(),
     validation_data=loader.load_validation_data(),
-    epochs=2,
+    epochs=20,
     callbacks=[model_persistence.model_checkpoint_callback()]
 )
-student_scratch.evaluate(loader.load_validation_data())
+model_persistence.model_save_sequential(student_scratch_2, "student_scratch_2.keras")
+student_scratch_2.evaluate(loader.load_validation_data())
+
+
+"""
+-------------------------------------------------------
+Student 3: former architecture with Batch Normalization
+-------------------------------------------------------
+"""
+
+# Create the student
+student_3 = tf.keras.Sequential(
+    [
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(4096, activation='relu'),
+        tf.keras.layers.Dense(4096, activation='relu'),
+        tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+    ],
+    name="student",
+)
+
+# Clone student for later comparison
+student_scratch_3 = tf.keras.Sequential(
+    [
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Conv2D(16, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Conv2D(32, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.Conv2D(64, 3, activation='relu'),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.BatchNormalization(),
+        tf.keras.layers.MaxPooling2D(),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(4096, activation='relu'),
+        tf.keras.layers.Dense(4096, activation='relu'),
+        tf.keras.layers.Dense(constants.NUM_CLASSES, activation='softmax')
+
+    ],
+    name="student_without_knowledge_distillation"
+)
+
+
+# Initialize and compile distiller
+distiller_3 = Distiller(student=student_3, teacher=teacher)
+distiller_3.compile(
+    optimizer=tf.keras.optimizers.Adam(),
+    metrics=["accuracy"],
+    student_loss_fn=tf.keras.losses.CategoricalCrossentropy(),
+    distillation_loss_fn=tf.keras.losses.KLDivergence(),
+    alpha=0.1,
+    temperature=10,
+)
+
+# Distill teacher to student
+distiller_3.fit(
+    loader.load_training_data(),
+    validation_data=loader.load_validation_data(),
+    epochs=20,
+    callbacks=[model_persistence.model_checkpoint_callback()]
+)
+
+# Evaluate student on test dataset
+distiller_3.evaluate(loader.load_validation_data())
+
+# save student
+model_persistence.model_save_sequential(student_3, "student_3.keras")
+# save distiller
+model_persistence.model_save_sequential(distiller_3, "distiller_3.keras")
+
+# Train student as done usually
+student_scratch_3.compile(
+    optimizer=tf.keras.optimizers.Adam(),
+    loss=tf.keras.losses.CategoricalCrossentropy(),
+    metrics=["accuracy"],
+)
+
+
+# Train and evaluate student trained from scratch.
+#
+student_scratch_3.fit(
+    loader.load_training_data(),
+    validation_data=loader.load_validation_data(),
+    epochs=20,
+    callbacks=[model_persistence.model_checkpoint_callback()]
+)
+model_persistence.model_save_sequential(student_scratch_3, "student_scratch_3.keras")
+student_scratch_3.evaluate(loader.load_validation_data())
