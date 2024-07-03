@@ -4,6 +4,14 @@
 - [Jonas Pollpeter](https://github.com/JonasPTFL)
 - [Julius Emil Arendt](https://github.com/Aremju)
 
+## Änderungen zu Meilenstein 3
+Neue Dateien (Konvertierung und Knowledge Distillation):
+- src/util/model_lite_converter.py
+- src/knowledge_distillation.py
+
+Anmerkung: Android App Code als zip Datei mit in die Abgabe im ILIAS hinzugefügt.
+
+
 ## Preprocessing
 
 ### Preprocessing steps for the food-101 dataset
